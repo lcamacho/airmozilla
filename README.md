@@ -195,6 +195,52 @@ And last but not least:
 
 Now you should be able to open `http://localhost:8000`.
 
+How to get it running with Docker
+---------------------------------
+
+You need to install [Docker](https://docs.docker.com/installation/#installation) in your machine and then you
+can build the image, but first you have to modify your `airmozilla/settings/local.py`
+file so it can connect to the database.
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'airmozilla',
+        'USER': 'postgres',
+        'PASSWORD': 'mozilla',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    # 'slave': {
+    #     ...
+    # },
+}
+```
+
+After this you can build your image:
+
+```
+docker build -t airmozilla .
+```
+
+Finally you have to make a container run based on this image, share your
+local directory and declare the port where you are going to connect:
+
+```
+docker run -d -p 8000:8000 --name web -v /full/path/to/airmozilla:/airmozilla airmozilla
+```
+
+With this if your are on Linux you can connect to `localhost:8000` or to
+`192.168.59.103:8000` if you are on Windows or Mac.
+Due the fact that on Windows and Mac docker uses boot2docker this ip can change
+at some point, to know the exact ip address you can execute `boot2docker ip`.
+
+If you want to run all tests you can execute:
+
+```
+docker exec -it web ./manage.py test
+```
 
 Getting help
 ------------
