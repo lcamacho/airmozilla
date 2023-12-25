@@ -1,4 +1,3 @@
-import random
 from collections import defaultdict
 
 from django.conf import settings
@@ -14,6 +13,7 @@ from airmozilla.main.models import Event, Channel, Tag
 from airmozilla.base.utils import get_base_url, get_abs_static
 from airmozilla.main.helpers import short_desc, thumbnail
 from airmozilla.manage import vidly
+import secrets
 
 
 def format_duration(duration):
@@ -296,7 +296,7 @@ class ITunesFeed(EventsFeed):
                     # We deliberately make the expiry date a bit random.
                     # This is to prevent the cache to expiry on all of them
                     # at the same time, but instead only some being expired.
-                    expires=60 * 60 + 60 * random.randint(1, 10)
+                    expires=60 * 60 + 60 * secrets.SystemRandom().randint(1, 10)
                 )
             except vidly.VidlyNotFoundError:
                 continue
