@@ -1,1 +1,2 @@
 tornado
+defusedxml~=0.7.1

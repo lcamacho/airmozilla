@@ -2,13 +2,14 @@ import httplib
 import urllib
 import urllib2
 import logging
-import xml.dom.minidom
 import xml.etree.ElementTree as ET
 
 import requests
 
 from django.core.cache import cache
 from django.conf import settings
+import defusedxml.ElementTree
+import defusedxml.minidom
 
 
 class VidlyTokenizeError(Exception):
@@ -62,7 +63,7 @@ def tokenize(tag, seconds):
             'Temporary network error when trying to fetch Vid.ly token'
         )
     response_content = response.read().strip()
-    root = ET.fromstring(response_content)
+    root = defusedxml.ElementTree.fromstring(response_content)
 
     success = root.find('Success')
     token = None
@@ -122,7 +123,7 @@ def add_media(
     )
     response = urllib2.urlopen(req)
     response_content = response.read().strip()
-    root = ET.fromstring(response_content)
+    root = defusedxml.ElementTree.fromstring(response_content)
     success = root.find('Success')
     if success is not None:
         # great!
@@ -158,7 +159,7 @@ def query(shortcodes):
     }
 
     response_content = _download(xml_string)
-    dom = xml.dom.minidom.parseString(response_content)
+    dom = defusedxml.minidom.parseString(response_content)
     results = _unpack_dom(dom, "Task")
     return results
 
@@ -181,7 +182,7 @@ def medialist(status):
     }
 
     response_content = _download(xml_string)
-    dom = xml.dom.minidom.parseString(response_content)
+    dom = defusedxml.minidom.parseString(response_content)
     results = _unpack_dom(dom, "Media")
     return results
 
@@ -201,7 +202,7 @@ def delete_media(shortcode, email=None):
     )
     response = urllib2.urlopen(req)
     response_content = response.read().strip()
-    root = ET.fromstring(response_content)
+    root = defusedxml.ElementTree.fromstring(response_content)
     success = root.find('Success')
     if success is not None:
         # great!
@@ -221,7 +222,7 @@ def statistics(shortcode):
     ET.SubElement(filter, 'MediaShortLink').text = shortcode
     xml_string = ET.tostring(root)
     response_content = _download(xml_string)
-    root = ET.fromstring(response_content)
+    root = defusedxml.ElementTree.fromstring(response_content)
     success = root.find('Success')
     if success is None:
         raise VidlyStatisticsError(response_content)
@@ -264,7 +265,7 @@ def update_media_protection(shortcode, protect, notify_url=None):
         ET.SubElement(source, 'Protect').text = ""
     xml_string = ET.tostring(root)
     response_content = _download(xml_string)
-    root = ET.fromstring(response_content)
+    root = defusedxml.ElementTree.fromstring(response_content)
     errors = root.find('Errors')
     if errors:
         # For example...
@@ -296,7 +297,7 @@ def update_media_protection(shortcode, protect, notify_url=None):
 
 
 def get_results_from_xml(xml_string):
-    dom = xml.dom.minidom.parseString(xml_string)
+    dom = defusedxml.minidom.parseString(xml_string)
     results = _unpack_dom(dom, "Result")
     return results
 
