@@ -3,7 +3,6 @@ from django.conf import settings
 from django.db.models import Q
 
 from slugify import slugify
-import requests
 from funfactory.urlresolvers import reverse
 
 from airmozilla.base.forms import BaseModelForm, GallerySelect
@@ -16,6 +15,7 @@ from airmozilla.main.models import (
 )
 from airmozilla.comments.models import SuggestedDiscussion
 from . import utils
+from security import safe_requests
 
 
 class StartForm(BaseModelForm):
@@ -75,7 +75,7 @@ class PopcornForm(BaseModelForm):
         url = self.cleaned_data['popcorn_url']
         if '://' not in url:
             url = 'http://' + url
-        response = requests.get(url)
+        response = safe_requests.get(url)
         if response.status_code != 200:
             raise forms.ValidationError('URL can not be found')
         return url

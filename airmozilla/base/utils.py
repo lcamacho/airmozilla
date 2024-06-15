@@ -8,7 +8,6 @@ import urlparse
 import random
 
 import pytz
-import requests
 from slugify import slugify
 
 from django.core.handlers.wsgi import WSGIRequest
@@ -22,6 +21,7 @@ from django.forms.utils import ErrorList
 from funfactory.helpers import static
 
 from airmozilla.base.akamai_token_v2 import AkamaiToken
+from security import safe_requests
 
 
 def roughly(number, variance_percentage=20):
@@ -78,8 +78,7 @@ def shorten_url(url):
     """return the URL shortened with Bit.ly"""
     if not settings.BITLY_ACCESS_TOKEN:
         raise ImproperlyConfigured('BITLY_ACCESS_TOKEN not set')
-    response = requests.get(
-        settings.BITLY_URL,
+    response = safe_requests.get(settings.BITLY_URL,
         params={
             'access_token': settings.BITLY_ACCESS_TOKEN,
             'longUrl': url
