@@ -32,7 +32,7 @@ def _fetch_users(email=None, groups=None, is_username=False):
         data['groups'] = ','.join(groups)
     url += '?' + urllib.urlencode(data)
 
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=60)
     if not resp.status_code == 200:
         url = url.replace(settings.MOZILLIANS_API_KEY, 'xxxscrubbedxxx')
         raise BadStatusCodeError('%s: on: %s' % (resp.status_code, url))
@@ -89,7 +89,7 @@ def _fetch_groups(order_by='name', limit=20, offset=0):
     }
     url += '?' + urllib.urlencode(data)
 
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=60)
     if not resp.status_code == 200:
         url = url.replace(settings.MOZILLIANS_API_KEY, 'xxxscrubbedxxx')
         raise BadStatusCodeError('%s: on: %s' % (resp.status_code, url))

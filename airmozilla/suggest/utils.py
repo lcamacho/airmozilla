@@ -11,7 +11,7 @@ content_regex = re.compile('content=[\'""](.*)[\'""]')
 
 
 def find_open_graph_image_url(url):
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     assert response.status_code == 200, response.status_code
     html = response.content
     for meta_tag in meta_tag_regex.findall(html):

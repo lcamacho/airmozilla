@@ -135,7 +135,7 @@ def save(request):
     cache_key = 'length_%s' % hashlib.md5(url).hexdigest()
     size = cache.get(cache_key)
     if not size:
-        r = requests.head(url)
+        r = requests.head(url, timeout=60)
         size = int(r.headers['content-length'])
         if not size:
             return http.HttpResponseBadRequest('URL could not be downloaded')
@@ -191,7 +191,7 @@ def save(request):
 @json_view
 def verify_size(request):
     url = request.GET.get('url')
-    r = requests.head(url)
+    r = requests.head(url, timeout=60)
     size = int(r.headers['content-length'])
     cache_key = 'length_%s' % hashlib.md5(url).hexdigest()
     cache.set(cache_key, size, 60 * 60)
