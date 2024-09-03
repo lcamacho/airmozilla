@@ -45,6 +45,7 @@ from airmozilla.base.tests.test_mozillians import (
     VOUCHED_FOR
 )
 from airmozilla.base.tests.testbase import DjangoTestCase
+import secrets
 
 
 class TestPages(DjangoTestCase):
@@ -123,11 +124,9 @@ class TestPages(DjangoTestCase):
         from airmozilla.main.views import is_employee
         user = User.objects.create(username='a', email='some@crack.com')
         ok_(not is_employee(user))
-
-        from random import choice
         user = User.objects.create(
             username='b',
-            email='foo@' + choice(settings.ALLOWED_BID)
+            email='foo@' + secrets.choice(settings.ALLOWED_BID)
         )
         ok_(is_employee(user))
 

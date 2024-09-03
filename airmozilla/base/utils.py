@@ -5,7 +5,6 @@ import urllib
 import subprocess
 import os
 import urlparse
-import random
 
 import pytz
 import requests
@@ -22,6 +21,7 @@ from django.forms.utils import ErrorList
 from funfactory.helpers import static
 
 from airmozilla.base.akamai_token_v2 import AkamaiToken
+import secrets
 
 
 def roughly(number, variance_percentage=20):
@@ -35,7 +35,7 @@ def roughly(number, variance_percentage=20):
     want them all to expire at the same time but instead stagger
     the expiration times a bit.
     """
-    percentage = random.randint(-variance_percentage, variance_percentage)
+    percentage = secrets.SystemRandom().randint(-variance_percentage, variance_percentage)
     return int(number * (1 + percentage / 100.0))
 
 
