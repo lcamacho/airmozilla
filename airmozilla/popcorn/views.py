@@ -49,7 +49,7 @@ def get_video_url(event):
     else:
         return http.HttpResponseBadRequest('Event is not a Vidly video')
 
-    response = requests.head(video_url)
+    response = requests.head(video_url, timeout=60)
 
     assert response.status_code == 302, response.status_code
 

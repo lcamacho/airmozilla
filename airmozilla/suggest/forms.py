@@ -75,7 +75,7 @@ class PopcornForm(BaseModelForm):
         url = self.cleaned_data['popcorn_url']
         if '://' not in url:
             url = 'http://' + url
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         if response.status_code != 200:
             raise forms.ValidationError('URL can not be found')
         return url
