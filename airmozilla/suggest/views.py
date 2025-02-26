@@ -10,8 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import utc, make_naive
 from django.db import transaction
 from django.conf import settings
-
-import requests
 import pytz
 from funfactory.urlresolvers import reverse
 from slugify import slugify
@@ -29,6 +27,7 @@ from airmozilla.base.utils import tz_apply
 from . import utils
 from . import forms
 from . import sending
+from security import safe_requests
 
 
 def _increment_slug_if_exists(slug):
@@ -149,7 +148,7 @@ def popcorn(request, id):
                 from django.core.files.uploadedfile import InMemoryUploadedFile
                 import os
                 from StringIO import StringIO
-                image_content = requests.get(image_url).content
+                image_content = safe_requests.get(image_url).content
                 buf = StringIO(image_content)
                 # Seek to the end of the stream, so we can get its
                 # length with `buf.tell()`

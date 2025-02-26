@@ -14,6 +14,7 @@ from django.core.exceptions import ImproperlyConfigured
 from funfactory.urlresolvers import reverse
 
 from airmozilla.main.models import Event, EventHitStats, Approval
+from security import safe_requests
 
 
 def _get_url():
@@ -154,7 +155,7 @@ def stats():
     if not getattr(settings, 'AUTOCOMPETER_KEY', None):
         raise ImproperlyConfigured("No settings.AUTOCOMPETER_KEY set up")
     autocompeter_url = _get_url()
-    response = requests.get(
+    response = safe_requests.get(
         autocompeter_url + '/stats',
         headers={
             'Auth-Key': settings.AUTOCOMPETER_KEY,
@@ -167,7 +168,7 @@ def stats():
 
 def test(term, domain=None):
     autocompeter_url = _get_url()
-    response = requests.get(
+    response = safe_requests.get(
         autocompeter_url,
         params={
             'd': domain or settings.AUTOCOMPETER_DOMAIN,
