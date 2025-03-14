@@ -44,8 +44,8 @@ def update(
             headers={
                 'Auth-Key': settings.AUTOCOMPETER_KEY,
             },
-            verify=not settings.DEBUG
-        )
+            verify=not settings.DEBUG, 
+        timeout=60)
         t1 = time.time()
         if verbose:  # pragma: no cover
             print >>out, response
@@ -141,8 +141,8 @@ def update(
         headers={
             'Auth-Key': settings.AUTOCOMPETER_KEY,
         },
-        verify=not settings.DEBUG
-    )
+        verify=not settings.DEBUG, 
+    timeout=60)
     t1 = time.time()
     assert response.status_code == 201, response.status_code
     if verbose:  # pragma: no cover
@@ -159,8 +159,8 @@ def stats():
         headers={
             'Auth-Key': settings.AUTOCOMPETER_KEY,
         },
-        verify=not settings.DEBUG
-    )
+        verify=not settings.DEBUG, 
+    timeout=60)
     assert response.status_code == 200, response.status_code
     return response.json()
 
@@ -173,7 +173,7 @@ def test(term, domain=None):
             'd': domain or settings.AUTOCOMPETER_DOMAIN,
             'q': term,
         },
-        verify=not settings.DEBUG
-    )
+        verify=not settings.DEBUG, 
+    timeout=60)
     assert response.status_code == 200, response.status_code
     return response.json()

@@ -348,11 +348,11 @@ def get_video_redirect_info(tag, format_, hd=False, expires=60 * 60):
             tag,
             format_
         )
-        req = requests.head(vidly_url)
+        req = requests.head(vidly_url, timeout=60)
         if req.status_code == 404:
             raise VidlyNotFoundError(tag)
         assert req.status_code == 302, (req.status_code, vidly_url)
-        req2 = requests.head(req.headers['Location'])
+        req2 = requests.head(req.headers['Location'], timeout=60)
         data = {
             'url': req.headers['Location'].split('?t=')[0],
             'length': req2.headers['Content-Length'],

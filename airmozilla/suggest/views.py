@@ -149,7 +149,7 @@ def popcorn(request, id):
                 from django.core.files.uploadedfile import InMemoryUploadedFile
                 import os
                 from StringIO import StringIO
-                image_content = requests.get(image_url).content
+                image_content = requests.get(image_url, timeout=60).content
                 buf = StringIO(image_content)
                 # Seek to the end of the stream, so we can get its
                 # length with `buf.tell()`

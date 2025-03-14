@@ -83,7 +83,7 @@ def get_content_intranet(url):
     else:
         return None, 'No credentials set up for intranet.mozilla.org'
 
-    response = requests.get(url, auth=credentials)
+    response = requests.get(url, auth=credentials, timeout=60)
     if response.status_code != 200:
         return None, response.status_code
     content = response.text
@@ -102,5 +102,5 @@ def get_content_etherpad(url):
         'https://etherpad.mozilla.org/ep/pad/export/%s/latest?format=txt'
         % pad
     )
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     return response.content, response.status_code
