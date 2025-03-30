@@ -3,6 +3,7 @@ from __future__ import with_statement, absolute_import
 import os.path
 
 from yaml import load
+import yaml
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -15,7 +16,7 @@ from .errors import ConfigurationFileInitialized,\
 
 class ConfigBase(object):
     def __init__(self, config_file_path):
-        self.options = load(open(config_file_path))
+        self.options = load(open(config_file_path), Loader=yaml.SafeLoader)
 
 
 class Config(ConfigBase):
