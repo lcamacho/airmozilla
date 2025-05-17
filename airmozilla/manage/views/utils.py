@@ -44,7 +44,7 @@ def can_edit_event(event, user, default='manage:events'):
 
 
 def get_var_templates(template):
-    env = Environment()
+    env = Environment(autoescape=True)
     ast = env.parse(template.content)
 
     exceptions = (
