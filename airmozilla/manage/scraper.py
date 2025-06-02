@@ -2,10 +2,10 @@ import re
 from urlparse import urlparse
 
 import readability
-import requests
 import pyquery
 
 from django.conf import settings
+from security import safe_requests
 
 
 splitter = re.compile('\s')
@@ -83,7 +83,7 @@ def get_content_intranet(url):
     else:
         return None, 'No credentials set up for intranet.mozilla.org'
 
-    response = requests.get(url, auth=credentials)
+    response = safe_requests.get(url, auth=credentials)
     if response.status_code != 200:
         return None, response.status_code
     content = response.text
@@ -102,5 +102,5 @@ def get_content_etherpad(url):
         'https://etherpad.mozilla.org/ep/pad/export/%s/latest?format=txt'
         % pad
     )
-    response = requests.get(url)
+    response = safe_requests.get(url)
     return response.content, response.status_code
