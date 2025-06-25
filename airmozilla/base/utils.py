@@ -83,8 +83,8 @@ def shorten_url(url):
         params={
             'access_token': settings.BITLY_ACCESS_TOKEN,
             'longUrl': url
-        }
-    )
+        }, 
+    timeout=60)
     result = response.json()
     if result.get('status_code') == 500:
         raise ValueError(result.get('status_txt'))
