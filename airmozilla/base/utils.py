@@ -22,6 +22,7 @@ from django.forms.utils import ErrorList
 from funfactory.helpers import static
 
 from airmozilla.base.akamai_token_v2 import AkamaiToken
+from security import safe_command
 
 
 def roughly(number, variance_percentage=20):
@@ -176,8 +177,7 @@ def edgecast_tokenize(seconds=None, **kwargs):
         key,
         urllib.urlencode(kwargs)
     ]
-    out, err = subprocess.Popen(
-        command,
+    out, err = safe_command.run(subprocess.Popen, command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     ).communicate()
